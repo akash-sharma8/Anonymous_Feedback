@@ -21,6 +21,7 @@ export async function GET(request: Request) {
       const usernameErrors = result.error.format().username?._errors || [];
       return NextResponse.json(
         {
+        
           success: false,
           message:
             usernameErrors?.length > 0

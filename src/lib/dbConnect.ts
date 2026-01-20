@@ -1,29 +1,29 @@
 import mongoose from 'mongoose';
 
 type ConnectionObject = {
-    isConnected?: number;
-}
+  isConnected?: number;
+};
 
-const connection : ConnectionObject = {}
+const connection: ConnectionObject = {};
 
 async function dbConnect(): Promise<void> {
-    if(connection.isConnected){
-        console.log("Already connected to database")
-        return 
-    }
-    try {
-       const db = await mongoose.connect(process.env.
-        MONGODB_URI  || '',{})
-        // console.log(db.connections[0])
-        connection.isConnected =db.connections[0].readyState
+  if (connection.isConnected) {
+    console.log("Already connected to database");
+    return;
+  }
 
-        console.log("DB connected successfully")
-        
-    } catch (error) {
-        console.log("DB connected failed",error);
+  if (!process.env.MONGODB_URI) {
+    throw new Error("MONGODB_URI is not defined in environment variables");
+  }
 
-        process.exit(1)
-    }
+  try {
+    const db = await mongoose.connect(process.env.MONGODB_URI);
+    connection.isConnected = db.connections[0].readyState;
+    console.log("DB connected successfully");
+  } catch (error) {
+    console.error("DB connection failed:", error);
+    throw error; //  don't use process.exit in serverless
+  }
 }
 
 export default dbConnect;
