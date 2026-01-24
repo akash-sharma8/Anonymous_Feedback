@@ -16,19 +16,19 @@ export async function POST(request: Request) {
       );
     }
     console.log("isAcceptingMessages:", user.isAcceptingMessages);
-    // Check if the user is accepting messages
+
     if (user.isAcceptingMessages === false) 
  {
       return Response.json(
         { message: 'User is not accepting messages', success: false },
-        { status: 403 } // 403 Forbidden status
+        { status: 403 } 
       );
     }
 console.log(user.toObject());
 
     const newMessage = { content, createdAt: new Date() };
 
-    // Push the new message to the user's messages array
+
     user.messages.push(newMessage as Message);
     await user.save();
 

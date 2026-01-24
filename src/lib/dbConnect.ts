@@ -22,7 +22,7 @@ async function dbConnect(): Promise<void> {
     console.log("DB connected successfully");
   } catch (error) {
     console.error("DB connection failed:", error);
-    throw error; //  don't use process.exit in serverless
+    throw error;
   }
 }
 

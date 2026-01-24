@@ -1,34 +1,34 @@
 'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Mail } from 'lucide-react'; // Assuming you have an icon for messages
+import { Mail } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Autoplay from 'embla-carousel-autoplay';
 import messages from '@/messages.json';
+import { useSession } from 'next-auth/react';
 
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from '@/components/ui/carousel';
 
 export default function Home() {
+  const { data: session } = useSession();
+
   return (
     <>
-      {/* Main content */}
       <main className="flex flex-col min-h-screen items-center justify-center px-4 md:px-24 py-12 bg-gray-800 text-white">
         
-        {/* Side Note */}
+
         <section className="w-full max-w-lg md:max-w-xl mb-6 p-4 bg-yellow-100 text-yellow-900 border border-yellow-300 rounded-md text-sm">
           Note: The domain has not been set up yet on Resend email, so OTP will not be sent. 
           For trial purposes, use email: <strong>akashsharmaf15@gmail.com</strong> 
           and password: <strong>123456</strong>.
         </section>
 
-        {/* Main Heading Section */}
         <section className="text-center mb-8 md:mb-12">
           <h1 className="text-3xl md:text-5xl font-bold">
             Dive into the World of Anonymous Feedback
@@ -36,16 +36,20 @@ export default function Home() {
           <p className="mt-3 md:mt-4 text-base md:text-lg">
             True Feedback - Where your identity remains a secret.
           </p>
-          <Link href="/dashboard">
-            <Button className="mt-6">Go to Dashboard</Button>
-          </Link>
+
+
+          {session ? (
+            <Link href="/dashboard">
+              <Button className="mt-6">Go to Dashboard</Button>
+            </Link>
+          ) : (
+            <Link href="/sign-in">
+              <Button className="mt-6">Login to Access Dashboard</Button>
+            </Link>
+          )}
         </section>
 
-        {/* Carousel for Messages */}
-        <Carousel
-          plugins={[Autoplay({ delay: 2000 })]}
-          className="w-full max-w-lg md:max-w-xl"
-        >
+        <Carousel plugins={[Autoplay({ delay: 2000 })]} className="w-full max-w-lg md:max-w-xl">
           <CarouselContent>
             {messages.map((message, index) => (
               <CarouselItem key={index} className="p-4">
@@ -57,9 +61,7 @@ export default function Home() {
                     <Mail className="flex-shrink-0" />
                     <div>
                       <p>{message.content}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {message.received}
-                      </p>
+                      <p className="text-xs text-muted-foreground">{message.received}</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -69,7 +71,6 @@ export default function Home() {
         </Carousel>
       </main>
 
-      {/* Footer */}
       <footer className="text-center p-4 md:p-6 bg-gray-900 text-white">
         © 2023 True Feedback. All rights reserved.
       </footer>

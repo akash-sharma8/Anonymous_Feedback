@@ -16,7 +16,7 @@ export async function GET(request: Request) {
     );
   }
 
-  // Ensure your session.user actually has _id
+
   const userId = new mongoose.Types.ObjectId((session.user as any)._id);
 
   try {

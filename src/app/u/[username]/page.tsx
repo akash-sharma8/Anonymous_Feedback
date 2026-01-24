@@ -80,7 +80,7 @@ export default function SendMessage() {
     setSuggestError(null);
     try {
       const res = await axios.post('/api/suggest-messages');
-      const text = await res.data; // adjust depending on your API response
+      const text = await res.data; 
       setSuggestions(text);
     } catch (error: any) {
       console.error('Error fetching messages:', error);

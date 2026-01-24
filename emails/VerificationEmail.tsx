@@ -56,18 +56,7 @@ export default function VerificationEmail({
                 <Row>
                     <Text>If you did not request this code, please ignore this email</Text>
                 </Row>
-                {/* <Row> */}
-                    {
-                        /* <Row>
-                        <Button href={'http://localhost:3000/verify/${username}'}
-                        style = {{color : '61dafb}}>
-                        Verify Here
-                        </Button>
-                        </Row>                 
-                                              
-                    */
-                    }
-                {/* </Row> */}
+              
             </section>
 
             <body>

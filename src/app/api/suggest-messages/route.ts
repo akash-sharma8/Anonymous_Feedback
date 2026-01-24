@@ -19,7 +19,7 @@ export async function POST(req: Request) {
       maxOutputTokens: 400,
     });
 
-    // Convert async iterable (textStream) into a ReadableStream
+
     const stream = new ReadableStream({
       async start(controller) {
         for await (const chunk of result.textStream) {
