@@ -20,6 +20,15 @@ export default function Home() {
     <>
       {/* Main content */}
       <main className="flex flex-col min-h-screen items-center justify-center px-4 md:px-24 py-12 bg-gray-800 text-white">
+        
+        {/* Side Note */}
+        <section className="w-full max-w-lg md:max-w-xl mb-6 p-4 bg-yellow-100 text-yellow-900 border border-yellow-300 rounded-md text-sm">
+          Note: The domain has not been set up yet on Resend email, so OTP will not be sent. 
+          For trial purposes, use email: <strong>akashsharmaf15@gmail.com</strong> 
+          and password: <strong>123456</strong>.
+        </section>
+
+        {/* Main Heading Section */}
         <section className="text-center mb-8 md:mb-12">
           <h1 className="text-3xl md:text-5xl font-bold">
             Dive into the World of Anonymous Feedback
@@ -27,11 +36,10 @@ export default function Home() {
           <p className="mt-3 md:mt-4 text-base md:text-lg">
             True Feedback - Where your identity remains a secret.
           </p>
-        <Link href="/dashboard">
+          <Link href="/dashboard">
             <Button className="mt-6">Go to Dashboard</Button>
           </Link>
         </section>
-
 
         {/* Carousel for Messages */}
         <Carousel
