@@ -39,7 +39,6 @@ export default function SendMessage() {
   const params = useParams<{ username: string }>();
   const username = params.username;
 
-  // Manage suggestion state manually
   const [suggestions, setSuggestions] = useState(initialMessageString);
   const [isSuggestLoading, setIsSuggestLoading] = useState(false);
   const [suggestError, setSuggestError] = useState<string | null>(null);
@@ -76,23 +75,29 @@ export default function SendMessage() {
     }
   };
 
-const fetchSuggestedMessages = async () => {
-  setIsSuggestLoading(true);
-  setSuggestError(null);
-  try {
-    const res = await axios.post('/api/suggest-messages');
-    const text = await res.data; // adjust depending on your API response
-    setSuggestions(text);
-  } catch (error: any) {
-    console.error('Error fetching messages:', error);
-    setSuggestError(error.message || 'Failed to fetch suggestions');
-  } finally {
-    setIsSuggestLoading(false);
-  }
-};
+  const fetchSuggestedMessages = async () => {
+    setIsSuggestLoading(true);
+    setSuggestError(null);
+    try {
+      const res = await axios.post('/api/suggest-messages');
+      const text = await res.data; // adjust depending on your API response
+      setSuggestions(text);
+    } catch (error: any) {
+      console.error('Error fetching messages:', error);
+      setSuggestError(error.message || 'Failed to fetch suggestions');
+    } finally {
+      setIsSuggestLoading(false);
+    }
+  };
 
   return (
-    <div className="container mx-auto my-8 p-6 bg-white rounded max-w-4xl">
+    <div className="relative container mx-auto my-8 p-6 bg-white rounded max-w-4xl">
+      {/* Corner Note */}
+      <div className="absolute top-4 right-4 bg-yellow-100 text-yellow-900 border border-yellow-300 rounded-md p-2 text-xs max-w-xs shadow-lg z-50">
+        <strong>Note:</strong> OpenAI suggestions are currently disabled because a paid API key is not available. 
+        The code is working correctly — check my GitHub profile for reference.
+      </div>
+
       <h1 className="text-4xl font-bold mb-6 text-center">
         Public Profile Link
       </h1>
