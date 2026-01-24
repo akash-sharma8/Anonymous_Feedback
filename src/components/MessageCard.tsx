@@ -43,43 +43,41 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
     }
 
     return (
-        <Card className="card-bordered">
-            <CardHeader>
-                <div className="flex justify-between items-start"> {/* changed items-center to items-start */}
-                    <CardTitle className="break-words">
-                        {message.content}
-                    </CardTitle>
-                    <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                            <Button variant='destructive'>
-                                <X className="w-5 h-5" />
-                            </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    This action cannot be undone. This will permanently delete
-                                    this message.
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel>
-                                    Cancel
-                                </AlertDialogCancel>
-                                <AlertDialogAction onClick={handleDeleteConfirm}>
-                                    Continue
-                                </AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
-                </div>
-                <div className="text-sm mt-1">
-                    {dayjs(message.createdAt).format('MMM D, YYYY h:mm A')}
-                </div>
-            </CardHeader>
-            <CardContent></CardContent>
-        </Card>
+        <Card className="card-bordered max-w-full break-words">
+    <CardHeader>
+        <div className="flex justify-between items-start w-full">
+            <CardTitle className="break-words max-w-full">
+                {message.content}
+            </CardTitle>
+            <AlertDialog>
+                <AlertDialogTrigger asChild>
+                    <Button variant='destructive' className="ml-2">
+                        <X className="w-5 h-5" />
+                    </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This action cannot be undone. This will permanently delete this message.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleDeleteConfirm}>
+                            Continue
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+        </div>
+        <div className="text-sm mt-1">
+            {dayjs(message.createdAt).format('MMM D, YYYY h:mm A')}
+        </div>
+    </CardHeader>
+    <CardContent></CardContent>
+</Card>
+
 
     );
 }
