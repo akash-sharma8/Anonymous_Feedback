@@ -77,36 +77,23 @@ export default function SendMessage() {
     }
   };
 
- const fetchSuggestedMessages = async () => {
-  setIsSuggestLoading(true);
-  setSuggestError(null);
+  const fetchSuggestedMessages = async () => {
+    setIsSuggestLoading(true);
+    setSuggestError(null);
 
-  try {
-    const res = await axios.post<ApiResponse<string>>('/api/suggest-messages');
+    try {
+      const res = await axios.post<ApiResponse<string>>('/api/suggest-messages');
+      setSuggestions(res.data.data || initialMessageString);
 
-    console.log("API full response:", res.data);
-    console.log("Extracted data:", res.data.data);
-
-    setSuggestions(res.data.data || initialMessageString);
-
-  } catch (error: any) {
-    console.error('Error fetching messages:', error);
-    setSuggestError(error.message || 'Failed to fetch suggestions');
-  } finally {
-    setIsSuggestLoading(false);
-  }
-};
-
-
-
+    } catch (error: any) {
+      console.error('Error fetching messages:', error);
+      setSuggestError(error.message || 'Failed to fetch suggestions');
+    } finally {
+      setIsSuggestLoading(false);
+    }
+  };
   return (
     <div className="relative container mx-auto my-8 p-6 bg-white rounded max-w-4xl">
-      {/* Corner Note */}
-      <div className="absolute top-4 right-4 bg-yellow-100 text-yellow-900 border border-yellow-300 rounded-md p-2 text-xs max-w-xs shadow-lg z-50">
-        <strong>Note:</strong> OpenAI suggestions are currently disabled because a paid API key is not available. 
-        The code is working correctly — check my GitHub profile for reference.
-      </div>
-
       <h1 className="text-4xl font-bold mb-6 text-center">
         Public Profile Link
       </h1>
