@@ -28,9 +28,11 @@ import { messageSchema } from '@/Schemas/messageSchema';
 
 const specialChar = '||';
 
-const parseStringMessages = (messageString: string): string[] => {
+const parseStringMessages = (messageString: string | unknown): string[] => {
+  if (typeof messageString !== 'string') return [];
   return messageString.split(specialChar);
 };
+
 
 const initialMessageString =
   "What's your favorite movie?||Do you have any pets?||What's your dream job?";
@@ -75,20 +77,27 @@ export default function SendMessage() {
     }
   };
 
-  const fetchSuggestedMessages = async () => {
-    setIsSuggestLoading(true);
-    setSuggestError(null);
-    try {
-      const res = await axios.post('/api/suggest-messages');
-      const text = await res.data; 
-      setSuggestions(text);
-    } catch (error: any) {
-      console.error('Error fetching messages:', error);
-      setSuggestError(error.message || 'Failed to fetch suggestions');
-    } finally {
-      setIsSuggestLoading(false);
-    }
-  };
+ const fetchSuggestedMessages = async () => {
+  setIsSuggestLoading(true);
+  setSuggestError(null);
+
+  try {
+    const res = await axios.post<ApiResponse<string>>('/api/suggest-messages');
+
+    console.log("API full response:", res.data);
+    console.log("Extracted data:", res.data.data);
+
+    setSuggestions(res.data.data || initialMessageString);
+
+  } catch (error: any) {
+    console.error('Error fetching messages:', error);
+    setSuggestError(error.message || 'Failed to fetch suggestions');
+  } finally {
+    setIsSuggestLoading(false);
+  }
+};
+
+
 
   return (
     <div className="relative container mx-auto my-8 p-6 bg-white rounded max-w-4xl">
