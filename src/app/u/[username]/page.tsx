@@ -97,7 +97,6 @@ export default function SendMessage() {
           </p>
         </div>
 
-        {/* Message Form */}
         <Card className="rounded-2xl shadow-sm">
           <CardHeader>
             <CardTitle>Your Message</CardTitle>
@@ -146,7 +145,6 @@ export default function SendMessage() {
           </CardContent>
         </Card>
 
-        {/* Suggestions */}
         <Card className="rounded-2xl">
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>Need inspiration?</CardTitle>
@@ -186,7 +184,6 @@ export default function SendMessage() {
 
         <Separator />
 
-        {/* CTA */}
         <div className="text-center space-y-3">
           <p className="text-gray-500">Want your own message board?</p>
           <Link href="/sign-up">

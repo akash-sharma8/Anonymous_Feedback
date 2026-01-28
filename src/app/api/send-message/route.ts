@@ -15,7 +15,7 @@ export async function POST(request: Request) {
         { status: 404 }
       );
     }
-    console.log("isAcceptingMessages:", user.isAcceptingMessages);
+    // console.log("isAcceptingMessages:", user.isAcceptingMessages);
 
     if (user.isAcceptingMessages === false) 
  {
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
         { status: 403 } 
       );
     }
-console.log(user.toObject());
+// console.log(user.toObject());
 
     const newMessage = { content, createdAt: new Date() };
 

@@ -53,45 +53,11 @@ export default function Home() {
                 </Button>
               </Link>
             )}
-            {/* <Link href="#features">
-              <Button size="lg" variant="outline" className="rounded-2xl px-8">
-                Learn More
-              </Button>
-            </Link> */}
+           
           </div>
+        
+
         </section>
-
-        {/* Features */}
-        {/* <section
-          id="features"
-          className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl w-full"
-        >
-          {[{
-            icon: <ShieldCheck className="h-6 w-6" />,
-            title: '100% Anonymous',
-            desc: 'No names, no tracking. Just honest feedback.'
-          }, {
-            icon: <Sparkles className="h-6 w-6" />,
-            title: 'Clean & Simple',
-            desc: 'Minimal UI focused on clarity and ease of use.'
-          }, {
-            icon: <Mail className="h-6 w-6" />,
-            title: 'Instant Messages',
-            desc: 'Receive feedback instantly in your dashboard.'
-          }].map((item, i) => (
-            <Card key={i} className="bg-white/5 border-white/10 backdrop-blur-xl rounded-2xl">
-              <CardHeader className="flex flex-row items-center gap-3">
-                {item.icon}
-                <CardTitle>{item.title}</CardTitle>
-              </CardHeader>
-              <CardContent className="text-gray-300 text-sm">
-                {item.desc}
-              </CardContent>
-            </Card>
-          ))}
-        </section> */}
-
-        {/* Testimonials / Messages */}
         <section className="mt-20 w-full max-w-xl">
           <h2 className="text-center text-2xl font-semibold mb-6">
             What People Are Saying
