@@ -1,40 +1,102 @@
 'use client'
+
 import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
-import React from 'react'
-import { Button } from './ui/button';
+import React, { useState } from 'react'
+import { Button } from './ui/button'
 import { User } from 'next-auth'
-
-
+import { Menu, X } from 'lucide-react'
 
 const Navbar = () => {
+  const { data: session } = useSession()
+  const user: User = session?.user as User
+  const [open, setOpen] = useState(false)
 
-    const { data: session } = useSession();
-    const user:User = session?.user as User
+  return (
+    <nav className="sticky top-0 z-50 bg-gray-900/90 backdrop-blur border-b border-gray-800 text-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 
+      flex items-center justify-between">
 
+        {/* Logo */}
+        <Link
+          href="/"
+          className="text-xl font-extrabold tracking-wide text-indigo-400"
+        >
+          Mstry Message
+        </Link>
 
-    return (
-        <nav className="p-4 md:p-6 shadow-md bg-gray-900 text-white">
-            <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
-                <a href="#" className="text-xl font-bold mb-4 md:mb-0">Mstry Message</a>
+        {/* Mobile Toggle */}
+        <button
+          className="md:hidden text-gray-200"
+          onClick={() => setOpen(!open)}
+        >
+          {open ? <X size={26} /> : <Menu size={26} />}
+        </button>
 
-                {
-                    session ? (
-                        <div className='flex gap-3'>
-                            <span className="mr-4">Welcome, {user.username || user.email}</span>
-                            <Button onClick={()=> signOut()} className="w-full md:w-auto bg-slate-100 text-black" variant='outline'>Logout</Button>
-                           
-  
-                        </div>
-                    ):(
-                        <Link href='/sign-in'>
-                            <Button className="w-full md:w-auto bg-slate-100 text-black" variant={'outline'}>Login</Button>
-                        </Link>
-                    )
-            }
+        {/* Desktop Menu */}
+        <div className="hidden md:flex items-center gap-4">
+          {session ? (
+            <>
+              <span className="text-sm text-gray-300">
+                Welcome,{' '}
+                <span className="text-white font-medium">
+                  {user.username || user.email}
+                </span>
+              </span>
+              <Button
+                onClick={() => signOut()}
+                variant="outline"
+                className="bg-gray-100 text-black"
+              >
+                Logout
+              </Button>
+            </>
+          ) : (
+            <Link href="/sign-in">
+              <Button variant="outline" className="bg-gray-100 text-black">
+                Login
+              </Button>
+            </Link>
+          )}
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      {open && (
+        <div className="md:hidden px-4 pb-4 bg-gray-900 border-t border-gray-800">
+          {session ? (
+            <div className="flex flex-col gap-3 mt-3">
+              <span className="text-sm text-gray-300">
+                Welcome,{' '}
+                <span className="text-white font-medium">
+                  {user.username || user.email}
+                </span>
+              </span>
+              <Button
+                onClick={() => {
+                  signOut()
+                  setOpen(false)
+                }}
+                variant="outline"
+                className="bg-gray-100 text-black"
+              >
+                Logout
+              </Button>
             </div>
-        </nav>
-    )
+          ) : (
+            <Link href="/sign-in" onClick={() => setOpen(false)}>
+              <Button
+                variant="outline"
+                className="bg-gray-100 text-black mt-3 w-full"
+              >
+                Login
+              </Button>
+            </Link>
+          )}
+        </div>
+      )}
+    </nav>
+  )
 }
 
 export default Navbar

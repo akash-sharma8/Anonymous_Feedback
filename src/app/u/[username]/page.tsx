@@ -1,15 +1,13 @@
-'use client';
+'use client'
 
-import React, { useState } from 'react';
-import axios, { AxiosError } from 'axios';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { Loader2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { CardHeader, CardContent, Card } from '@/components/ui/card';
-import { callCompletionApi } from 'ai';
-
+import React, { useState } from 'react'
+import axios, { AxiosError } from 'axios'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { Loader2, Sparkles } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Form,
   FormControl,
@@ -17,160 +15,185 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+} from '@/components/ui/form'
+import { toast } from 'sonner'
+import * as z from 'zod'
+import { ApiResponse } from '@/types/ApiResponse'
+import Link from 'next/link'
+import { useParams } from 'next/navigation'
+import { messageSchema } from '@/Schemas/messageSchema'
 
-import { toast } from 'sonner';
-import * as z from 'zod';
-import { ApiResponse } from '@/types/ApiResponse';
-import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { messageSchema } from '@/Schemas/messageSchema';
-
-const specialChar = '||';
+const specialChar = '||'
 
 const parseStringMessages = (messageString: string | unknown): string[] => {
-  if (typeof messageString !== 'string') return [];
-  return messageString.split(specialChar);
-};
-
+  if (typeof messageString !== 'string') return []
+  return messageString.split(specialChar)
+}
 
 const initialMessageString =
-  "What's your favorite movie?||Do you have any pets?||What's your dream job?";
+  "What's your favorite movie?||Do you have any pets?||What's your dream job?"
 
 export default function SendMessage() {
-  const params = useParams<{ username: string }>();
-  const username = params.username;
+  const params = useParams<{ username: string }>()
+  const username = params.username
 
-  const [suggestions, setSuggestions] = useState(initialMessageString);
-  const [isSuggestLoading, setIsSuggestLoading] = useState(false);
-  const [suggestError, setSuggestError] = useState<string | null>(null);
+  const [suggestions, setSuggestions] = useState(initialMessageString)
+  const [isSuggestLoading, setIsSuggestLoading] = useState(false)
+  const [suggestError, setSuggestError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm<z.infer<typeof messageSchema>>({
     resolver: zodResolver(messageSchema),
-  });
+  })
 
-  const messageContent = form.watch('content');
+  const messageContent = form.watch('content')
 
   const handleMessageClick = (message: string) => {
-    form.setValue('content', message);
-  };
-
-  const [isLoading, setIsLoading] = useState(false);
+    form.setValue('content', message)
+  }
 
   const onSubmit = async (data: z.infer<typeof messageSchema>) => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
       const response = await axios.post<ApiResponse>('/api/send-message', {
         ...data,
         username,
-      });
-
-      toast.success(response.data.message);
-      form.reset({ ...form.getValues(), content: '' });
+      })
+      toast.success(response.data.message)
+      form.reset({ content: '' })
     } catch (error) {
-      const axiosError = error as AxiosError<ApiResponse>;
+      const axiosError = error as AxiosError<ApiResponse>
       toast.error(
         axiosError.response?.data.message ?? 'Failed to send message'
-      );
+      )
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const fetchSuggestedMessages = async () => {
-    setIsSuggestLoading(true);
-    setSuggestError(null);
-
+    setIsSuggestLoading(true)
+    setSuggestError(null)
     try {
-      const res = await axios.post<ApiResponse<string>>('/api/suggest-messages');
-      setSuggestions(res.data.data || initialMessageString);
-
+      const res = await axios.post<ApiResponse<string>>('/api/suggest-messages')
+      setSuggestions(res.data.data || initialMessageString)
     } catch (error: any) {
-      console.error('Error fetching messages:', error);
-      setSuggestError(error.message || 'Failed to fetch suggestions');
+      setSuggestError(error.message || 'Failed to fetch suggestions')
     } finally {
-      setIsSuggestLoading(false);
+      setIsSuggestLoading(false)
     }
-  };
-  return (
-    <div className="relative container mx-auto my-8 p-6 bg-white rounded max-w-4xl">
-      <h1 className="text-4xl font-bold mb-6 text-center">
-        Public Profile Link
-      </h1>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <FormField
-            control={form.control}
-            name="content"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Send Anonymous Message to @{username}</FormLabel>
-                <FormControl>
-                  <textarea
-                    placeholder="Write your anonymous message here"
-                    className="resize-none"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="flex justify-center">
-            {isLoading ? (
-              <Button disabled>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Please wait
-              </Button>
-            ) : (
-              <Button type="submit" disabled={isLoading || !messageContent}>
-                Send It
-              </Button>
-            )}
-          </div>
-        </form>
-      </Form>
+  }
 
-      <div className="space-y-4 my-8">
-        <div className="space-y-2">
-          <Button
-            onClick={fetchSuggestedMessages}
-            className="my-4"
-            disabled={isSuggestLoading}
-          >
-            {isSuggestLoading ? 'Loading...' : 'Suggest Messages'}
-          </Button>
-          <p>Click on any message below to select it.</p>
+  return (
+    <div className="min-h-screen bg-gray-50 px-4 py-12">
+      <div className="mx-auto max-w-3xl space-y-10">
+        {/* Header */}
+        <div className="text-center space-y-3">
+          <h1 className="text-4xl font-bold tracking-tight">
+            Send Anonymous Message
+          </h1>
+          <p className="text-gray-500">
+            Share honest thoughts with <span className="font-medium">@{username}</span>
+          </p>
         </div>
-        <Card>
+
+        {/* Message Form */}
+        <Card className="rounded-2xl shadow-sm">
           <CardHeader>
-            <h3 className="text-xl font-semibold">Messages</h3>
+            <CardTitle>Your Message</CardTitle>
           </CardHeader>
-          <CardContent className="flex flex-col space-y-4">
+          <CardContent>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
+              >
+                <FormField
+                  control={form.control}
+                  name="content"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Anonymous Message</FormLabel>
+                      <FormControl>
+                        <textarea
+                          {...field}
+                          rows={5}
+                          placeholder="Write your message here..."
+                          className="
+                            w-full resize-none rounded-xl border
+                            border-gray-300 px-4 py-3 text-sm
+                            focus:outline-none focus:ring-2 focus:ring-indigo-500
+                          "
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Button
+                  type="submit"
+                  className="w-full rounded-xl"
+                  disabled={isLoading || !messageContent}
+                >
+                  {isLoading && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  Send Message
+                </Button>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+
+        {/* Suggestions */}
+        <Card className="rounded-2xl">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>Need inspiration?</CardTitle>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={fetchSuggestedMessages}
+              disabled={isSuggestLoading}
+              className="flex gap-1"
+            >
+              <Sparkles className="h-4 w-4" />
+              {isSuggestLoading ? 'Loading...' : 'Suggest'}
+            </Button>
+          </CardHeader>
+
+          <CardContent className="flex flex-wrap gap-2">
             {suggestError ? (
-              <p className="text-red-500">{suggestError}</p>
+              <p className="text-sm text-red-500">{suggestError}</p>
             ) : (
               parseStringMessages(suggestions).map((message, index) => (
-                <Button
+                <button
                   key={index}
-                  variant="outline"
-                  className="mb-2"
                   onClick={() => handleMessageClick(message)}
+                  className="
+                    rounded-full border border-gray-300
+                    px-4 py-1.5 text-sm
+                    text-gray-700 hover:bg-gray-100
+                    transition
+                  "
                 >
                   {message}
-                </Button>
+                </button>
               ))
             )}
           </CardContent>
         </Card>
-      </div>
-      <Separator className="my-6" />
-      <div className="text-center">
-        <div className="mb-4">Get Your Message Board</div>
-        <Link href={'/sign-up'}>
-          <Button>Create Your Account</Button>
-        </Link>
+
+        <Separator />
+
+        {/* CTA */}
+        <div className="text-center space-y-3">
+          <p className="text-gray-500">Want your own message board?</p>
+          <Link href="/sign-up">
+            <Button className="rounded-xl">Create Your Account</Button>
+          </Link>
+        </div>
       </div>
     </div>
-  );
+  )
 }

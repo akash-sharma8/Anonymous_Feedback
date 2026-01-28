@@ -3,12 +3,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Mail } from 'lucide-react';
+import { Mail, ShieldCheck, Sparkles } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Autoplay from 'embla-carousel-autoplay';
 import messages from '@/messages.json';
 import { useSession } from 'next-auth/react';
-
 import {
   Carousel,
   CarouselContent,
@@ -19,61 +18,115 @@ export default function Home() {
   const { data: session } = useSession();
 
   return (
-    <>
-      <main className="flex flex-col min-h-screen items-center justify-center px-4 md:px-24 py-12 bg-gray-800 text-white">
-        
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white flex flex-col">
+      {/* Hero Section */}
+      <main className="flex-1 flex flex-col items-center justify-center px-4 md:px-24 py-16">
+        {/* Notice */}
+        <div className="w-full max-w-2xl mb-10 rounded-xl border border-yellow-300/40 bg-yellow-100/90 p-4 text-sm text-yellow-900 shadow-md">
+          <strong>Demo Notice:</strong> Email service is not configured yet. <br />
+          Use <strong>akashsharmaf15@gmail.com</strong> / <strong>123456</strong> to try the app.
+        </div>
 
-        <section className="w-full max-w-lg md:max-w-xl mb-6 p-4 bg-yellow-100 text-yellow-900 border border-yellow-300 rounded-md text-sm">
-          Note: The domain has not been set up yet on Resend email, so OTP will not be sent. 
-          For trial purposes, use email: <strong>akashsharmaf15@gmail.com</strong> 
-          and password: <strong>123456</strong>.
-        </section>
-
-        <section className="text-center mb-8 md:mb-12">
-          <h1 className="text-3xl md:text-5xl font-bold">
-            Dive into the World of Anonymous Feedback
+        {/* Heading */}
+        <section className="text-center max-w-3xl">
+          <h1 className="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight">
+            Anonymous Feedback,
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-500">
+              Honest Opinions
+            </span>
           </h1>
-          <p className="mt-3 md:mt-4 text-base md:text-lg">
-            True Feedback - Where your identity remains a secret.
+          <p className="mt-5 text-base md:text-lg text-gray-300">
+            Share and receive feedback without fear. Your identity stays hidden, always.
           </p>
 
-
-          {session ? (
-            <Link href="/dashboard">
-              <Button className="mt-6">Go to Dashboard</Button>
-            </Link>
-          ) : (
-            <Link href="/sign-in">
-              <Button className="mt-6">Login to Access Dashboard</Button>
-            </Link>
-          )}
+          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+            {session ? (
+              <Link href="/dashboard">
+                <Button size="lg" className="rounded-2xl px-8">
+                  Go to Dashboard
+                </Button>
+              </Link>
+            ) : (
+              <Link href="/sign-in">
+                <Button size="lg" className="rounded-2xl px-8">
+                  Get Started
+                </Button>
+              </Link>
+            )}
+            {/* <Link href="#features">
+              <Button size="lg" variant="outline" className="rounded-2xl px-8">
+                Learn More
+              </Button>
+            </Link> */}
+          </div>
         </section>
 
-        <Carousel plugins={[Autoplay({ delay: 2000 })]} className="w-full max-w-lg md:max-w-xl">
-          <CarouselContent>
-            {messages.map((message, index) => (
-              <CarouselItem key={index} className="p-4">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>{message.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex flex-col md:flex-row items-start space-y-2 md:space-y-0 md:space-x-4">
-                    <Mail className="flex-shrink-0" />
-                    <div>
-                      <p>{message.content}</p>
-                      <p className="text-xs text-muted-foreground">{message.received}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
+        {/* Features */}
+        {/* <section
+          id="features"
+          className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl w-full"
+        >
+          {[{
+            icon: <ShieldCheck className="h-6 w-6" />,
+            title: '100% Anonymous',
+            desc: 'No names, no tracking. Just honest feedback.'
+          }, {
+            icon: <Sparkles className="h-6 w-6" />,
+            title: 'Clean & Simple',
+            desc: 'Minimal UI focused on clarity and ease of use.'
+          }, {
+            icon: <Mail className="h-6 w-6" />,
+            title: 'Instant Messages',
+            desc: 'Receive feedback instantly in your dashboard.'
+          }].map((item, i) => (
+            <Card key={i} className="bg-white/5 border-white/10 backdrop-blur-xl rounded-2xl">
+              <CardHeader className="flex flex-row items-center gap-3">
+                {item.icon}
+                <CardTitle>{item.title}</CardTitle>
+              </CardHeader>
+              <CardContent className="text-gray-300 text-sm">
+                {item.desc}
+              </CardContent>
+            </Card>
+          ))}
+        </section> */}
+
+        {/* Testimonials / Messages */}
+        <section className="mt-20 w-full max-w-xl">
+          <h2 className="text-center text-2xl font-semibold mb-6">
+            What People Are Saying
+          </h2>
+          <Carousel plugins={[Autoplay({ delay: 2500 })]}>
+            <CarouselContent>
+              {messages.map((message, index) => (
+                <CarouselItem key={index} className="p-2">
+                  <Card className="bg-white text-black rounded-2xl shadow-lg">
+                    <CardHeader>
+                      <CardTitle className="text-base">
+                        {message.title}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex gap-3">
+                      <Mail className="h-5 w-5 text-gray-500 mt-1" />
+                      <div>
+                        <p className="text-sm">{message.content}</p>
+                        <p className="text-xs text-gray-400 mt-1">
+                          {message.received}
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+        </section>
       </main>
 
-      <footer className="text-center p-4 md:p-6 bg-gray-900 text-white">
-        © 2023 True Feedback. All rights reserved.
+      {/* Footer */}
+      <footer className="border-t border-white/10 text-center py-6 text-sm text-gray-400">
+        © 2026 True Feedback · Built with ❤️ by Akash Sharma
       </footer>
-    </>
+    </div>
   );
 }
