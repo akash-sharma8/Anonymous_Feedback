@@ -1,41 +1,54 @@
-import { GoogleGenAI } from "@google/genai";
+import Groq from "groq-sdk";
 import { NextResponse } from "next/server";
 
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY!,
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
 });
 
-const prompt =
-  "Create a list of three open-ended and engaging questions formatted as a single string. Each question should be separated by '||'. These questions are for an anonymous social messaging platform, like Qooh.me, and should be suitable for a diverse audience. Avoid personal or sensitive topics, focusing instead on universal themes that encourage friendly interaction. For example, your output should be structured like this: 'What’s a hobby you’ve recently started?||If you could have dinner with any historical figure, who would it be?||What’s a simple thing that makes you happy?'. Ensure the questions are intriguing, foster curiosity, and contribute to a positive and welcoming conversational environment.";
+const prompt = `
+Create a list of three open-ended and engaging questions formatted as a single string.
+
+Each question should be separated by '||'.
+
+These questions are for an anonymous social messaging platform.
+
+Avoid personal or sensitive topics.
+
+Example:
+What's a hobby you've recently started?||
+If you could travel anywhere tomorrow, where would you go?||
+What's a simple thing that makes you happy?
+`;
 
 export async function POST() {
   try {
-    const stream = await ai.models.generateContentStream({
-      model: "gemini-3-flash-preview",
-      contents: prompt,
-    });
 
-    let fullText = "";
+    const completion =
+      await groq.chat.completions.create({
+        model: "llama-3.3-70b-versatile",
 
-    for await (const chunk of stream) {
-      fullText += chunk?.text ?? "";
-    }
+        messages: [
+          {
+            role: "user",
+            content: prompt,
+          },
+        ],
 
-    if (!fullText.trim()) {
-      return NextResponse.json(
-        { success: false, message: "Empty response from AI" },
-        { status: 500 }
-      );
-    }
+        temperature: 0.8,
+        max_tokens: 200,
+      });
+
+    const responseText =
+      completion.choices[0]?.message?.content || "";
 
     return NextResponse.json({
       success: true,
-      message: "Messages generated successfully",
-      data: fullText,
+      data: responseText,
     });
 
-  } catch (error: any) {
-    console.error("Gemini error:", error);
+  } catch (error) {
+
+    console.error("Groq Error:", error);
 
     return NextResponse.json(
       {
