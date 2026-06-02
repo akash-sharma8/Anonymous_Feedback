@@ -30,6 +30,7 @@
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "genai": "^0.0.18",
+    "groq-sdk": "^1.2.1",
     "lucide-react": "^0.562.0",
     "mongodb": "^7.0.0",
     "mongoose": "^9.1.3",
