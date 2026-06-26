@@ -20,7 +20,7 @@ bun dev
 
 #Demo
 <p align="center">
-  <img src="./assets/Screen Recording 2026-06-26 113717.gif" alt="PDF AI Assistant Demo" width="900">
+  <img src="./assets/Screen Recording 2026-06-26 113717.gif" alt="PDF AI Assistant Demo" width="400">
 </p>
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
