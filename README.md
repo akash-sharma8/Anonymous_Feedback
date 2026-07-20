@@ -1,45 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Anonymous Feedback
+
+Anonymous Feedback is a modern Next.js app for sharing honest opinions anonymously. Users can create an account, verify their email, share a public profile link, and receive messages from others without revealing their identity.
+
+The app also includes a dashboard where users can manage whether they accept incoming messages, view received feedback, copy their profile link, and use AI-generated message prompts to encourage thoughtful responses.
+
+## Features
+
+- Secure sign-up and sign-in with NextAuth credentials
+- Email verification flow using Resend
+- Public profile pages at /u/[username]
+- Anonymous message submission to a user’s profile
+- Dashboard for viewing and managing received messages
+- Toggle to enable or disable message acceptance
+- Copyable profile link for easy sharing
+- AI-generated suggestion prompts via Groq
+
+## Tech Stack
+
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS
+- shadcn/ui components
+- NextAuth
+- MongoDB with Mongoose
+- Resend for email delivery
+- Groq SDK for message suggestions
+
+## Project Structure
+
+- src/app — app routes, pages, and API endpoints
+- src/components — reusable UI components
+- src/context — auth context providers
+- src/model — Mongoose user schema and message model
+- src/lib — database and service integrations
+- src/Schemas — form validation schemas
+- src/emails — email templates for verification
 
 ## Getting Started
 
-First, run the development server:
+1. Install dependencies
+
+```bash
+npm install
+```
+
+2. Create a .env.local file in the project root with the following variables:
+
+```env
+MONGODB_URI=your_mongodb_connection_string
+NEXTAUTH_SECRET=your_nextauth_secret
+RESEND_API_KEY=your_resend_api_key
+GROQ_API_KEY=your_groq_api_key
+NEXTAUTH_URL=http://localhost:3000
+```
+
+3. Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-
-
-
-
 ```
 
-#Demo
+4. Open http://localhost:3000 in your browser.
+
+## Available Scripts
+
+```bash
+npm run dev
+npm run build
+npm run start
+npm run lint
+```
+
+## Demo Notes
+
+The landing page includes a demo notice for previewing the experience. The app currently shows example demo credentials for trying the UI:
+
+- Email: akashsharmaf15@gmail.com
+- Password: 123456
+
+If email delivery is not configured in your environment, verification emails may not be sent successfully.
+
+## Deployment
+
+This project is ready to be deployed on platforms such as Vercel or any Node.js-compatible hosting service. Make sure to configure the same environment variables in your deployment environment.
+
+## Demo
+
 <p align="center">
-  <img src="./assets/Screen Recording 2026-06-26 113717.gif" alt="PDF AI Assistant Demo" width="400">
+  <img src="./assets/Screen Recording 2026-06-26 113717.gif" alt="Anonymous Feedback demo" width="400">
 </p>
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
